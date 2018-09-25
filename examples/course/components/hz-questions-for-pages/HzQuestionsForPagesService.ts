@@ -29,9 +29,6 @@ export class HzQuestionsForPagesService{
     public stop(){
 
     }
-    public hasInstance(){
-        return HzQuestionsForPagesComponent.__instance != undefined;
-    }
     /**
      * @see EventEmitter#on
      */

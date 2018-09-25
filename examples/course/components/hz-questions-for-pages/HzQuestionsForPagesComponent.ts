@@ -66,28 +66,19 @@ export class HzQuestionsForPagesComponent extends ComponentController {
             let questions = [];
             if(completed.length > 0) {
                 for (let page of completed) {
-                    let pageOptions = this._options.options.pages[page];
-                    if(pageOptions && pageOptions.questions) {
-                        questions = questions.concat(pageOptions.questions);
-                    }
+                    questions = questions.concat(this._options.options.pages[page].questions);
                 }
-                if(questions.length > 0) {
-                    let options = $.extend(true, {}, this._options.options.quiz);
-                    options.quiz = options.quiz || {};
-                    options.quiz.body = options.quiz.body || {};
-                    options.quiz.body.questions = questions;
-                    this._$quiz.empty();
-                    this._$quiz.jqQuiz(options);
-                    this._$element.dialog("open");
-                }
+                let options = $.extend(true, {}, this._options.options.quiz);
+                options.quiz = options.quiz || {};
+                options.quiz.body = options.quiz.body || {};
+                options.quiz.body.questions = questions;
+                this._$quiz.empty();
+                this._$quiz.jqQuiz(options);
+                this._$element.dialog("open");
             }
         }
     }
     stop(){
-        if(this._running){
-            this._running = false;
-            this._$quiz.empty();
-            this._$element.dialog("close");
-        }
+
     }
 }

@@ -2,14 +2,12 @@
   "name": "@haztivity/hz-questions-for-pages",
   "version": "0.7.0",
   "description": "A component to ask random questions to the user depending on the page.",
-  "main": "dist/hz-questions-for-pages.js",
-  "jsnext:main": "esm2015/hz-questions-for-pages.js",
-  "ts:main": "src/index.ts",
-  "types": "src/index.ts",
-  "typings": "src/index.ts",
+  "main": "dist/HzQuestionsForPages.js",
+  "module": "dist/HzQuestionsForPages.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && rimraf esm2015 && rollup -c",
+    "build_no": "rimraf dist && rimraf esm2015 && rollup -c",
+    "build": "tsc -p src",
     "doc": "rimraf docs & typedoc --mode modules --ignoreCompilerErrors --readme none --exclude **/index.ts --out docs ./src"
   },
   "repository": {
@@ -33,20 +31,20 @@
     "lodash.camelcase": "^4.3.0",
     "prismjs": "^1.12.2",
     "rimraf": "^2.6.2",
-    "rollup": "^0.57.1",
+    "rollup": "^0.59.1",
     "rollup-plugin-license": "^0.6.0",
     "rollup-plugin-typescript": "^0.8.1",
-    "rollup-plugin-typescript2": "^0.12.0",
     "rollup-plugin-uglify": "^3.0.0",
     "rollup-plugin-uglify-es": "0.0.1",
+    "uglify-js": "^3.3.25",
     "typedoc": "^0.11.1",
     "typedoc-plugin-external-module-name": "^1.1.1",
-    "typescript": "^2.7.2",
-    "uglify-js": "^3.3.16"
+    "typescript": "^2.7.2"
   },
   "dependencies": {
     "@haztivity/core": "^0.7.0",
     "jq-quiz": "^1.1.0",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "pug": "^2.0.3"
   }
 }

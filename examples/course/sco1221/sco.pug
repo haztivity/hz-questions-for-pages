@@ -1,16 +1,72 @@
 include node:@haztivity/hz-navbar/src/_hzNavbar
-div(data-hz-pages)
 -
-    let times = {
-        "6611":{
-            "weight":1
+    let options = {
+        "quiz":{
+            "randomize":true,
+            "autoGoNext":true,
+            "immediateFeedback":true,
+            "showCorrection":false,
+            "showResult":false,
+            "delayOnAutoNext":1000,
+            "quiz":{
+                "header": {
+                    "title": "My quiz",
+                    "description": "Description for my quiz",
+                    "actions":[
+                        {
+                            "type":"start",
+                            "content":"Comenzar"
+                        }
+                    ]
+                }
+            }
         },
-        "6612":{
-            "weight":1
-        },
-        "6613":{
-            "weight":0
+        "pages":{
+            "6611":{
+                "questions":[
+                    {
+                        "content":"Question 1",
+                        "options":[
+                            {
+                                "name":"option11",
+                                "content":"Option incorrect",
+                                "isCorrect":false
+                            },
+                            {
+                                "name":"option12",
+                                "content":"Option correct",
+                                "isCorrect":true
+                            }
+                        ]
+                    }
+                ]
+            },
+            "6622":{
+                "questions":[
+                    {
+                        "content":"Question 2",
+                        "options":[
+                            {
+                                "name":"option21",
+                                "content":"Option incorrect",
+                                "isCorrect":false
+                            },
+                            {
+                                "name":"option22",
+                                "content":"Option correct",
+                                "isCorrect":true
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
-div(data-hz-component="HzTimeControl", data-opt-hz-time-control-time="1", data-opt-hz-time-control-times=times)
+div(
+    data-hz-component="HzQuestionsForPages",
+    data-opt-hz-questions-for-pages-options=options,
+    data-opt-hz-questions-for-pages-toggler="#toggleQuestions"
+)
+    div(data-hz-questions-for-pages-quiz)
+div(data-hz-pages)
 +hz-navbar

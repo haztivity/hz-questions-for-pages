@@ -7,7 +7,7 @@ import "./main.scss";
 import "./markdown.scss";
 import "./prism-github.scss";
 import {ScoFactory, Sco, ISco} from "@haztivity/core";
-import {HzTimeControlComponent} from "../components/hz-time-control/HzTimeControlComponent";
+import {HzQuestionsForPagesComponent} from "../components/hz-questions-for-pages/HzQuestionsForPages";
 import {HzNavbarComponent} from "@haztivity/hz-navbar";
 import {page as page6611} from "./pages/6611/page";
 import {page as page6612} from "./pages/6612/page";
@@ -23,7 +23,7 @@ let sco: ISco = ScoFactory.createSco(
         ],
         components: [
             HzNavbarComponent,
-            HzTimeControlComponent
+            HzQuestionsForPagesComponent
         ]
     }
 );
