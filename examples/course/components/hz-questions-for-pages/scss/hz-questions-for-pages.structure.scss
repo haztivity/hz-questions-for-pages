@@ -1,0 +1,32 @@
+.hz-questions-for-pages{
+    position:absolute;
+    max-height: 90vh;
+    .ui-dialog-titlebar{
+        padding:6px 8px;
+        display: flex;
+    }
+    .ui-dialog-titlebar-close{
+        margin-left:auto;
+        cursor: pointer;
+    }
+    .ui-dialog-content{
+        overflow: auto;
+        padding:0 8px 8px;
+    }
+}
+.ui-widget-overlay{
+    position: fixed;
+    top: 0;
+    right:0;
+    bottom:0;
+    left: 0;
+    background: #aaaaaa;
+    opacity: .3;
+    filter: Alpha(Opacity=30);
+}
+.ui-front{
+    &.ui-dialog,
+    &.ui-widget-overlay{
+        z-index: 100;
+    }
+}

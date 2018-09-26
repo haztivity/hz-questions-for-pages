@@ -5,7 +5,8 @@ import {
     EventEmitterFactory,
     DataOptions,
     Navigator,
-    PageManager
+    PageManager,
+    PageController
 } from "@haztivity/core";
 import "jquery-ui-dist/jquery-ui";
 import "jq-quiz";
@@ -24,15 +25,30 @@ import "jq-quiz";
 export class HzQuestionsForPagesComponent extends ComponentController {
     public static readonly NAMESPACE = "hzQuestionsForPages";
     protected static readonly PREFIX = "hz-questions-for-pages";
+    public static readonly ON_START = `${HzQuestionsForPagesComponent.NAMESPACE}:start`;
+    public static readonly ON_END = `${HzQuestionsForPagesComponent.NAMESPACE}:end`;
+    public static readonly ON_OPTION_CHANGE = `${HzQuestionsForPagesComponent.NAMESPACE}:optionchange`;
+    public static readonly ON_QUIZ_END = `${HzQuestionsForPagesComponent.NAMESPACE}:quizend`;
+    public static readonly ON_TOGGLER_ENABLED = `${HzQuestionsForPagesComponent.NAMESPACE}:togglerenabled`;
+    public static readonly ON_TOGGLER_DISABLED = `${HzQuestionsForPagesComponent.NAMESPACE}:togglerdisabled`;
+    protected static readonly CLASS_TOGGLER = HzQuestionsForPagesComponent.PREFIX+"-toggler";
+    protected static readonly CLASS_TOGGLER_DISABLED = HzQuestionsForPagesComponent.CLASS_TOGGLER+"--disabled";
     protected _running:boolean = false;
     protected _$quiz;
     protected static __instance;
+    protected _$toggler;
+    protected _togglerDisabled:boolean;
     protected static readonly _DEFAULTS = {
         dialog:{
             autoOpen:false,
             resizable:false,
             draggable:false,
-            closeOnEscape:false
+            closeOnEscape:false,
+            dialogClass:"hz-questions-for-pages",
+            position:{my:"center",at:"center",of:window},
+            modal:true,
+            show:"fade",
+            hide:"fade"
         }
     };
 
@@ -45,16 +61,43 @@ export class HzQuestionsForPagesComponent extends ComponentController {
         this._options = $.extend(true, {}, HzQuestionsForPagesComponent._DEFAULTS, options);
         this._$element.dialog(this._options.dialog);
         this._$quiz = this._$element.find("[data-hz-questions-for-pages-quiz]");
+        this._$toggler = this._$("[data-hz-questions-for-pages-toggler]").addClass(HzQuestionsForPagesComponent.CLASS_TOGGLER);
+        this._assignEvents();
+    }
+    protected _onQuestionChange(e,quiz, questionId, optionId,optionValue,questionRuntime){
+        let instance = e.data.instance;
+        instance._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_OPTION_CHANGE,[quiz, questionId, optionId,optionValue,questionRuntime]);
+    }
+    protected _onQuizEnd(e,quiz,calification){
+        let instance = e.data.instance;
+        instance._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_QUIZ_END,[quiz, calification]);
+    }
+    protected _onDialogClose(e){
+        e.data.instance.stop();
     }
     /**
      * Asigna los handlers a eventos
      * @protected
      */
     protected _assignEvents() {
-
+        this._$quiz.on("jqQuiz:questionChange",{instance:this},this._onQuestionChange);
+        this._$quiz.on("jqQuiz:end",{instance:this},this._onQuizEnd);
+        this._$element.on("dialogclose",{instance:this},this._onDialogClose);
+        this._Navigator.on(Navigator.ON_CHANGE_PAGE_START+"."+HzQuestionsForPagesComponent.NAMESPACE,{instance:this},this._onPageChangeStart);
+        this._eventEmitter.globalEmitter.on(PageController.ON_COMPLETE_CHANGE+"."+HzQuestionsForPagesComponent.NAMESPACE,{instance:this},this._onPageCompleted);
+        if(this._$toggler){
+            let that = this;
+            this._$toggler.on("click",function(){
+                that.toggle();
+            });
+        }
     }
-    protected _parseJQuizOptions(){
-        this._options
+    protected _onPageChangeStart(e){
+        e.data.instance.stop();
+        e.data.instance.disableToggler();
+    }
+    protected _onPageCompleted(e){
+        e.data.instance.enableToggler();
     }
     isRunning(){
         return this._running;
@@ -79,6 +122,7 @@ export class HzQuestionsForPagesComponent extends ComponentController {
                     this._$quiz.empty();
                     this._$quiz.jqQuiz(options);
                     this._$element.dialog("open");
+                    this._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_START,[this]);
                 }
             }
         }
@@ -89,8 +133,34 @@ export class HzQuestionsForPagesComponent extends ComponentController {
             this._$quiz.empty();
             if(this._$quiz.data("uiJqQuiz")){
                 this._$quiz.jqQuiz("destroy");
+                this._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_END,[this]);
             }
-            this._$element.dialog("close");
+            if(this._$element.dialog("isOpen")) {
+                this._$element.dialog("close");
+            }
+        }
+    }
+    toggle(){
+        if(this.isRunning()){
+            this.stop();
+        }else{
+            this.start();
+        }
+    }
+    enableToggler(){
+        if(this._togglerDisabled) {
+            this._togglerDisabled = false;
+            this._$toggler.prop("disabled", false);
+            this._$toggler.removeClass(HzQuestionsForPagesComponent.CLASS_TOGGLER_DISABLED);
+            this._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_TOGGLER_ENABLED, [this]);
+        }
+    }
+    disableToggler(){
+        if(!this._togglerDisabled) {
+            this._togglerDisabled = true;
+            this._$toggler.prop("disabled", true);
+            this._$toggler.addClass(HzQuestionsForPagesComponent.CLASS_TOGGLER_DISABLED);
+            this._eventEmitter.trigger(HzQuestionsForPagesComponent.ON_TOGGLER_DISABLED, [this]);
         }
     }
 }

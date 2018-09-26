@@ -12,7 +12,10 @@ import {HzQuestionsForPagesComponent} from "./HzQuestionsForPages";
 )
 export class HzQuestionsForPagesService{
     constructor(){
-        let publish = [
+        let publish =[
+            "enableToggler",
+            "disableToggler",
+            "toggle",
             "start",
             "stop",
             "on",
@@ -27,6 +30,15 @@ export class HzQuestionsForPagesService{
 
     }
     public stop(){
+
+    }
+    public enableToggler(){
+
+    }
+    public disableToggler(){
+
+    }
+    public toggle(){
 
     }
     public hasInstance(){
