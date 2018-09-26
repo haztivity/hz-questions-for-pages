@@ -87,6 +87,9 @@ export class HzQuestionsForPagesComponent extends ComponentController {
         if(this._running){
             this._running = false;
             this._$quiz.empty();
+            if(this._$quiz.data("uiJqQuiz")){
+                this._$quiz.jqQuiz("destroy");
+            }
             this._$element.dialog("close");
         }
     }
