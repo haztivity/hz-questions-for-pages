@@ -1,6 +1,6 @@
 {
   "name": "@haztivity/hz-questions-for-pages",
-  "version": "0.0.0",
+  "version": "0.7.0-beta.0",
   "description": "A component to ask random questions to the user depending on the page.",
   "main": "dist/HzQuestionsForPages.js",
   "module": "dist/HzQuestionsForPages.js",
